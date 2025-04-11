@@ -58,7 +58,7 @@ Dashboard interativo para análise epidemiológica de casos de câncer de pele n
 
 ```
 dashboard-analise-epid/
-├── app.py                 # Aplicação principal
+├── cintificaCa.py         # Aplicação principal
 ├── componentes.py         # Componentes da interface
 ├── utils.py               # Funções utilitárias
 ├── visualizations.py      # Funções de visualização de dados
