@@ -2,6 +2,49 @@ import pandas as pd
 import re
 from datetime import datetime
 
+def mapear_colunas(df):
+    """
+    Mapeia as colunas do DataFrame para os nomes padrão esperados.
+    Verifica variações comuns dos nomes das colunas.
+    """
+    mapeamento = {
+        # Variações para TOPOGRAF
+        'TOPOGRAF': ['LOCTUPRI', 'LOCTUDET', 'LOCTUMORPRIM', 'CID'],
+        
+        # Variações para datas
+        'DTDIAGNO': ['DTDIAGNO', 'DATAPRICON', 'DTPRICON'],
+        'DATAINITRT': ['DATAINITRT', 'DTINITRT'],
+        'DATAOBITO': ['DATAOBITO'],
+        
+        # Variações para dados demográficos
+        'SEXO': ['SEXO'],
+        'IDADE': ['IDADE'],
+        'RACACOR': ['RACACOR'],
+        'UF': ['ESTADRES', 'UFUH'],  # Usando ESTADRES ou UFUH como UF
+        'INSTRUC': ['INSTRUC'],
+        'LOUCTUPRI': ['LOCTUPRI', 'LOCTUDET']
+    }
+
+    novo_df = df.copy()
+    colunas_encontradas = {}
+
+    # Para cada coluna padrão que precisamos
+    for coluna_padrao, variacoes in mapeamento.items():
+        # Procura por todas as variações possíveis
+        for variacao in variacoes:
+            if variacao in df.columns:
+                novo_df[coluna_padrao] = df[variacao]
+                colunas_encontradas[coluna_padrao] = variacao
+                break
+    
+    # Verificar colunas ausentes
+    colunas_ausentes = set(mapeamento.keys()) - set(colunas_encontradas.keys())
+    if colunas_ausentes:
+        print(f"Aviso: As seguintes colunas não foram encontradas: {colunas_ausentes}")
+        print(f"Colunas disponíveis no arquivo: {df.columns.tolist()}")
+    
+    return novo_df
+
 # Função para calcular a diferença entre datas
 def calcular_diferenca(data1, data2):
     # Verificar se alguma das datas é '99/99/9999'
@@ -37,14 +80,20 @@ def get_raca_map():
 
 # Função para processar os dados carregados
 def processar_dataframe(df):
+    # Mapear colunas para nomes padrão
+    df = mapear_colunas(df)
+    
     # Converter datas importantes
-    df["DTDIAGNO"] = pd.to_datetime(df["DTDIAGNO"], errors="coerce", format="%d/%m/%Y")
-    df["DATAINITRT"] = pd.to_datetime(df["DATAINITRT"], errors="coerce", format="%d/%m/%Y")
-    df["DATAOBITO"] = pd.to_datetime(df["DATAOBITO"], errors="coerce", format="%d/%m/%Y")
+    colunas_data = ["DTDIAGNO", "DATAINITRT", "DATAOBITO"]
+    for col in colunas_data:
+        if col in df.columns:
+            df[col] = pd.to_datetime(df[col], errors="coerce", format="%d/%m/%Y")
     
     # Extrair o ano de diagnóstico e óbito
-    df["ANO_DIAGNO"] = df["DTDIAGNO"].dt.year
-    df["ANO_OBITO"] = df["DATAOBITO"].dt.year
+    if "DTDIAGNO" in df.columns:
+        df["ANO_DIAGNO"] = df["DTDIAGNO"].dt.year
+    if "DATAOBITO" in df.columns:
+        df["ANO_OBITO"] = df["DATAOBITO"].dt.year
     
     return df
 

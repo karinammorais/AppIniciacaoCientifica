@@ -6,47 +6,73 @@ def aplicar_estilos():
     # CSS personalizado para melhorar a aparência da aplicação
     st.markdown("""
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
     /* Estilo geral */
     [data-testid="stAppViewContainer"] {
-        background-color: #1E1E1E;
+        background-color: #000000;
         color: #FFFFFF;
+        font-family: 'Montserrat', 'Roboto', Arial, sans-serif;
     }
-    
-    /* Cabeçalhos */
-    h1, h2, h3, h4, h5, h6 {
-        font-family: 'Arial', sans-serif;
+    /* Cabeçalho customizado */
+    .painel-title {
+        font-family: 'Montserrat', 'Roboto', Arial, sans-serif;
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #fff;
+        letter-spacing: 2px;
+        margin-bottom: 0.2rem;
+    }
+    .painel-title-roxo {
+        color: #7D3C98;
+        font-weight: 700;
+        font-size: 2.8rem;
+        letter-spacing: 2px;
+    }
+    /* Tabs customizadas */
+    .stTabs [data-baseweb="tab"] {
+        font-size: 18px;
+        padding: 10px 24px;
+        background-color: #000000;
+        border: 2px solid #7D3C98;
+        border-bottom: none;
+        color: #fff;
+        border-radius: 12px 12px 0 0;
+        font-family: 'Montserrat', 'Roboto', Arial, sans-serif;
+    }
+    .stTabs [data-baseweb="tab"]:hover {
+        background-color: #1a1a1a;
+        color: #7D3C98;
+    }
+    .stTabs [aria-selected="true"] {
+        background-color: #7D3C98 !important;
+        color: #fff !important;
+        border-bottom: 2px solid #7D3C98 !important;
+    }
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 5px;
+    }
+    .stTabs [data-baseweb="tab-panel"] {
+        padding: 15px 10px;
+        background-color: #181818;
+        border-radius: 0 0 12px 12px;
+    }
+    /* Botões customizados */
+    .stButton > button {
+        background-color: #7D3C98;
+        color: #fff;
+        border-radius: 8px;
+        border: none;
+        font-family: 'Montserrat', 'Roboto', Arial, sans-serif;
+        font-size: 1.1rem;
         font-weight: 600;
-        color: #FFFFFF;
+        padding: 0.6rem 2.2rem;
+        margin: 0.5rem 0;
+        transition: background 0.2s;
     }
-    
-    h1 {
-        margin-bottom: 2rem;
-        font-size: 2.5rem;
-        background: linear-gradient(90deg, #4361EE, #4CC9F0);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        display: inline-block;
+    .stButton > button:hover {
+        background-color: #5e2877;
+        color: #fff;
     }
-    
-    h2 {
-        margin-top: 2rem;
-        margin-bottom: 1rem;
-        font-size: 1.8rem;
-        color: #4CC9F0;
-    }
-    
-    h3 {
-        margin-top: 1.5rem;
-        margin-bottom: 0.8rem;
-        font-size: 1.4rem;
-        color: #4895EF;
-    }
-    
-    /* Containers */
-    [data-testid="stVerticalBlock"] {
-        padding: 0.5rem;
-    }
-    
     /* Cards e blocos de conteúdo */
     .card {
         padding: 1.5rem;

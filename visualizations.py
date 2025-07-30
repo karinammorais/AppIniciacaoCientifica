@@ -5,6 +5,7 @@ import streamlit as st
 from fpdf import FPDF
 import base64
 from io import BytesIO
+import pandas as pd
 
 # Paleta de cores moderna e vibrante
 PALETA_CORES = [
@@ -54,7 +55,19 @@ def aplicar_estilo_moderno(fig):
     
     return fig
 
-def criar_grafico_pizza(df, coluna, titulo):
+def criar_grafico_pizza(dados, coluna, titulo):
+    # Se os dados vierem como Series, converter para DataFrame
+    if isinstance(dados, pd.Series):
+        df = dados.reset_index()
+        if 'count' in df.columns:  # caso de value_counts()
+            df.columns = [coluna, 'QUANTIDADE']
+        else:
+            df.columns = [coluna, 'QUANTIDADE']
+    else:
+        df = dados.copy()
+        if 'count' in df.columns:
+            df = df.rename(columns={'count': 'QUANTIDADE'})
+    
     fig = px.pie(
         df, 
         names=coluna, 
@@ -79,7 +92,22 @@ def criar_grafico_pizza(df, coluna, titulo):
     
     return fig
 
-def criar_grafico_barras(df, x, y, titulo):
+def criar_grafico_barras(dados, x, y, titulo):
+    # Se os dados vierem como Series, converter para DataFrame
+    if isinstance(dados, pd.Series):
+        df = dados.reset_index()
+        if 'count' in df.columns:  # caso de value_counts()
+            df.columns = [x, 'QUANTIDADE']
+            y = 'QUANTIDADE'
+        elif y == 0:  # Caso especial quando y é o valor da contagem
+            df.columns = [x, 'QUANTIDADE']
+            y = 'QUANTIDADE'
+    else:
+        df = dados.copy()
+        if 'count' in df.columns:
+            df = df.rename(columns={'count': 'QUANTIDADE'})
+            y = 'QUANTIDADE'
+    
     fig = px.bar(
         df, 
         x=x, 

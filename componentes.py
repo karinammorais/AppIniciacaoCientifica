@@ -33,111 +33,80 @@ ANIMATIONS = {
 def mostrar_sidebar(dados_por_ano, anos_disponiveis):
     """Mostra a barra lateral com opções de filtro"""
     with st.sidebar:
-        st.markdown("<h3 style='text-align: center;'>Filtros e Configurações</h3>", unsafe_allow_html=True)
-        
-        # Carregar animação para sidebar
-        lottie_sidebar = load_lottieurl(ANIMATIONS["analytics"])
-        if lottie_sidebar:
-            st_lottie(lottie_sidebar, height=150, key="sidebar_animation")
-        
-        # Seleção de ano
+        st.markdown("""
+        <style>
+            .css-1cpxqw2 {
+                background-color: #000000;
+                border: 2px solid #7D3C98;
+                border-radius: 12px;
+                padding: 10px;
+                color: white;
+                font-weight: bold;
+            }
+        </style>
+        """, unsafe_allow_html=True)
         ano_selecionado = st.selectbox(
-            "Selecione o ano para visualização:", 
-            anos_disponiveis,
+            "Filtre o ano",
+            options=anos_disponiveis,
             index=len(anos_disponiveis)-1 if anos_disponiveis else 0
         )
-        
-        # Estimativa de população (com valor padrão ajustável)
-        populacao_default = {
-            2018: 209469333,
-            2019: 210147125,
-            2020: 211755692,
-            2021: 213317639,
-            2022: 214828540,
-            2023: 216422446,
-        }.get(ano_selecionado, 211000000)
-        
-        populacao_brasil = st.number_input(
-            "População estimada do Brasil:", 
-            min_value=100000000, 
-            max_value=250000000, 
-            value=populacao_default,
-            step=1000000,
-            format="%d"
-        )
-        
-        # Opções de visualização
-        st.markdown("### Opções de Visualização")
-        mostrar_tabelas = st.checkbox("Mostrar tabelas de dados", value=False)
-        tema_grafico = st.selectbox(
-            "Tema dos gráficos:",
-            ["Padrão", "Azul-Roxo", "Verde-Azul", "Roxo-Rosa"]
-        )
-        
-        # Informações adicionais
-        st.markdown("---")
-        st.markdown("""
-        <div style='font-size: 0.8rem; opacity: 0.7;'>
-        Dados do Ministério da Saúde<br>
-        Última atualização: 2023
-        </div>
-        """, unsafe_allow_html=True)
-    
-    return ano_selecionado, populacao_brasil, mostrar_tabelas
+    return ano_selecionado
 
 def mostrar_header():
     """Exibe o cabeçalho da aplicação"""
-    col1, col2 = st.columns([3, 1])
-    
+    col1, col2 = st.columns([1, 8])
     with col1:
-        st.title("Dashboard de Análise Epidemiológica")
-        st.markdown("### Monitoramento de Casos de Câncer de Pele no Brasil")
-        
+        st.image("logo.png", width=110)
     with col2:
-        # Carregar animação para o cabeçalho
-        lottie_header = load_lottieurl(ANIMATIONS["cancer"])
-        if lottie_header:
-            st_lottie(lottie_header, height=150, key="header_animation")
+        st.markdown("""
+        <div style='display:flex; align-items:center;'>
+            <span class='painel-title'>PAINEL SKIN </span>
+            <span class='painel-title-roxo'>MELANOMA BRASIL</span>
+        </div>
+        <div style='margin-top:0.5rem; font-size:1.1rem; color:#ccc;'>
+            Nosso sistema gera automaticamente relatórios epidemiológicos históricos sobre o câncer de pele tipo melanoma, com base em dados abertos de fontes oficiais nacionais e internacionais. A plataforma integra essas informações de forma inteligente, permitindo análises rápidas, confiáveis e atualizadas sobre a evolução do melanoma no Brasil e no mundo.
+        </div>
+        """, unsafe_allow_html=True)
+        st.markdown("<div style='display:flex; justify-content:center; margin-top:1.5rem;'>", unsafe_allow_html=True)
+        st.button("Visualizar relatório epidemiológico")
+        st.markdown("</div>", unsafe_allow_html=True)
 
 def mostrar_secao_upload(callback_processamento=None):
-    """Exibe a seção de upload de arquivos"""
-    st.markdown("## 📤 Upload de Dados")
-    
-    col1, col2 = st.columns([3, 1])
-    
-    with col1:
-        st.markdown("""
-        Faça upload dos arquivos Excel (.xlsx) contendo os dados de câncer para análise.
-        Os arquivos devem conter o ano no nome (ex: inCA_2021.xlsx).
-        """)
-        uploaded_files = st.file_uploader(
-            "Selecione os arquivos Excel", 
-            accept_multiple_files=True, 
-            type="xlsx"
-        )
-    
-    with col2:
-        # Carregar animação para upload
-        lottie_upload = load_lottieurl(ANIMATIONS["upload"])
-        if lottie_upload:
-            st_lottie(lottie_upload, height=150, key="upload_animation")
-    
-    if uploaded_files and callback_processamento:
-        with st.spinner("Processando os dados..."):
-            # Simular processamento para melhor experiência do usuário
-            progresso = st.progress(0)
-            for i in range(101):
-                time.sleep(0.01)
-                progresso.progress(i)
-            
-            # Executar a função de callback para processar os arquivos
-            resultado = callback_processamento(uploaded_files)
-            progresso.empty()
-            
-            if resultado:
-                st.success("✅ Dados carregados com sucesso!")
-                return True
-    
+    """Exibe a seção de upload de arquivos"""    
+    st.markdown("""
+        <div style='display:flex; justify-content:center; margin-top:2rem;'>
+            <div style='width: 100%; max-width: 500px;'>
+                <div style='border: 2px dashed #7D3C98; border-radius: 10px; padding: 30px; background: #181818;'>
+                    <h4 style='text-align:center; color:#fff; margin-bottom:1.5rem;'>Arraste e solte os arquivos aqui</h4>
+                    <div style='display:flex; justify-content:center;'>
+                        <span style='color:#aaa; font-size:0.95rem;'>Formatos aceitos: .xlsx</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+    uploaded_files = st.file_uploader(
+        "",
+        type=["xlsx"],
+        accept_multiple_files=True,
+        key="file_uploader"
+    )
+    st.markdown("<div style='display:flex; justify-content:center; margin-top:1.5rem;'>", unsafe_allow_html=True)
+    if st.button("Processar", key="enviar-arquivos", use_container_width=False):
+        if uploaded_files:
+            if callback_processamento:
+                with st.spinner("Processando os dados..."):
+                    progresso = st.progress(0)
+                    for i in range(101):
+                        time.sleep(0.01)
+                        progresso.progress(i)
+                    resultado = callback_processamento(uploaded_files)
+                    progresso.empty()
+                    if resultado:
+                        st.success("✅ Dados carregados com sucesso!")
+        else:
+            st.warning("Por favor, selecione pelo menos um arquivo.")
+    st.markdown("</div>", unsafe_allow_html=True)
     return False
 
 def mostrar_indicadores_gerais(dados, ano_selecionado, populacao_brasil):
