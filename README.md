@@ -28,28 +28,9 @@
 
 <div align="center">
 
-[![Status do Projeto](https://img.shields.io/badge/Status-Em%20Desenvolvimento-brightgreen)](#)
-[![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](#)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.31.0-red)](#)
-[![Licença](https://img.shields.io/badge/Licença-MIT-green)](#)
-
----
-
 <img src="logo.png" alt="Logo do Projeto" width="200"/>
 
 </div>
-
-## � Índice
-
-- [Visão Geral](#-visão-geral)
-- [Funcionalidades](#-funcionalidades)
-- [Tecnologias](#-tecnologias-utilizadas)
-- [Estrutura](#-estrutura-do-projeto)
-- [Instalação](#-como-executar)
-- [Documentação](#-documentação-adicional)
-- [Contribuição](#-contribuições)
-- [Licença](#-licença)
-
 ## �📊 Estrutura do Projeto
 
 ```
