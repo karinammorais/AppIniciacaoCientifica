@@ -26,11 +26,6 @@
 
 ## 📊 Estrutura do Projetopidemiológica - Câncer de Pele
 
-<div align="center">
-
-<img src="logo.png" alt="Logo do Projeto" width="200"/>
-
-</div>
 ## �📊 Estrutura do Projeto
 
 ```
