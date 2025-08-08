@@ -61,6 +61,8 @@ Dashboard interativo para análise epidemiológica de casos de câncer de pele n
 
 ## ✨ Funcionalidades
 
+<div align="center">
+
 | Categoria | Descrição |
 |-----------|-----------|
 | 📊 **Indicadores Epidemiológicos** | Taxas de incidência, prevalência e letalidade |
@@ -69,6 +71,8 @@ Dashboard interativo para análise epidemiológica de casos de câncer de pele n
 | 📑 **Relatórios** | Geração de PDF com análises completas |
 | 📊 **Visualizações Interativas** | Gráficos e dashboards responsivos |
 | 🎨 **Interface Moderna** | Design intuitivo e visual agradável |
+
+</div>
 
 ## 💻 Tecnologias Utilizadas
 
