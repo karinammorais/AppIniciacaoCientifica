@@ -30,7 +30,7 @@ ANIMATIONS = {
     "analytics": "https://lottie.host/85de38cd-bc89-45ec-8b0d-b4af44eb240d/2KDgxT5s5k.json"
 }
 
-def mostrar_sidebar(dados_por_ano, anos_disponiveis):
+def mostrar_sidebar(dados_por_ano, anos_disponiveis, estados_disponiveis):
     """Mostra a barra lateral com opções de filtro"""
     with st.sidebar:
         st.markdown("""
@@ -45,12 +45,19 @@ def mostrar_sidebar(dados_por_ano, anos_disponiveis):
             }
         </style>
         """, unsafe_allow_html=True)
-        ano_selecionado = st.selectbox(
-            "Filtre o ano",
+        anos_selecionados = st.multiselect(
+            "Filtre os anos",
             options=anos_disponiveis,
-            index=len(anos_disponiveis)-1 if anos_disponiveis else 0
+            default=anos_disponiveis[-1:] if anos_disponiveis else [],
+            label_visibility="visible"
         )
-    return ano_selecionado
+        estados_selecionados = st.multiselect(
+            "Filtre os estados",
+            options=estados_disponiveis,
+            default=estados_disponiveis if estados_disponiveis else [],
+            label_visibility="visible"
+        )
+    return anos_selecionados, estados_selecionados
 
 def mostrar_header():
     """Exibe o cabeçalho da aplicação"""
@@ -430,4 +437,4 @@ def mostrar_tempos_medios(dados, ano_selecionado, mostrar_tabelas=False):
             dados_tempos[col] = dados_tempos[col].dt.strftime('%d/%m/%Y')
         
         # Exibir tabela
-        st.dataframe(dados_tempos) 
+        st.dataframe(dados_tempos)

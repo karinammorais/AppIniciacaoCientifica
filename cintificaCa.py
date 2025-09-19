@@ -90,25 +90,31 @@ def main():
         st.markdown("""
         <div style="text-align: center; opacity: 0.7; padding: 20px;">
             <p>Dashboard de Análise Epidemiológica - Versão 2.0</p>
-            <p>© 2023 - Todos os direitos reservados</p>
+            <p>© 2025 - Todos os direitos reservados</p>
         </div>
         """, unsafe_allow_html=True)
         if dados_carregados:
             st.rerun()
         return
     
-    # Mostrar sidebar e obter seleção de ano
-    ano_selecionado = mostrar_sidebar(
+    # Mostrar sidebar e obter seleção de ano e estado
+    anos_selecionados, estados_selecionados = mostrar_sidebar(
         st.session_state.dados_por_ano,
-        st.session_state.anos_disponiveis
+        st.session_state.anos_disponiveis,
+        estados_disponiveis=["SP", "RJ", "MG"]  # Exemplo de estados disponíveis
     )
-    
-    # Obter dados do ano selecionado
-    df = st.session_state.dados_por_ano[ano_selecionado]
+
+    # Obter dados dos anos selecionados
+    if anos_selecionados:
+        dfs_selecionados = [st.session_state.dados_por_ano[ano] for ano in anos_selecionados]
+        df = pd.concat(dfs_selecionados)
+    else:
+        st.warning("Nenhum ano foi selecionado. Por favor, selecione pelo menos um ano.")
+        return
     
     # Calcular indicadores
-    indicadores_incidencia = calcular_indicadores_incidencia(df, 211000000)  # valor padrão
-    indicadores_mortalidade = calcular_indicadores_mortalidade(df)
+    indicadores_incidencia = calcular_indicadores_incidencia(df, 211000000, estados_selecionados)  # valor padrão
+    indicadores_mortalidade = calcular_indicadores_mortalidade(df, estados_selecionados)
     indicadores_tempos = calcular_tempos_medios(df)
     indicadores_perfil = calcular_perfil_demografico(df)
     
@@ -137,7 +143,7 @@ def main():
     st.markdown("""
     <div style="text-align: center; opacity: 0.7; padding: 20px;">
         <p>Dashboard de Análise Epidemiológica - Versão 2.0</p>
-        <p>© 2023 - Todos os direitos reservados</p>
+        <p>© 2025 - Todos os direitos reservados</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -149,4 +155,4 @@ def resetar_aplicacao():
 
 # Executar a aplicação
 if __name__ == "__main__":
-    main() 
+    main()

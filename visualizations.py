@@ -55,7 +55,11 @@ def aplicar_estilo_moderno(fig):
     
     return fig
 
-def criar_grafico_pizza(dados, coluna, titulo):
+def criar_grafico_pizza(dados, coluna, titulo, estados_selecionados=None):
+    # Filtrar por estados selecionados, se aplicável
+    if estados_selecionados:
+        dados = dados[dados['UF'].isin(estados_selecionados)]
+
     # Se os dados vierem como Series, converter para DataFrame
     if isinstance(dados, pd.Series):
         df = dados.reset_index()
@@ -67,7 +71,7 @@ def criar_grafico_pizza(dados, coluna, titulo):
         df = dados.copy()
         if 'count' in df.columns:
             df = df.rename(columns={'count': 'QUANTIDADE'})
-    
+
     fig = px.pie(
         df, 
         names=coluna, 
@@ -75,24 +79,28 @@ def criar_grafico_pizza(dados, coluna, titulo):
         title=titulo,
         color_discrete_sequence=PALETA_CORES
     )
-    
+
     fig.update_traces(
         textposition='inside', 
         textinfo='percent+label',
         marker=dict(line=dict(color='#1E1E1E', width=1))
     )
-    
+
     fig = aplicar_estilo_moderno(fig)
-    
+
     # Adicionar hoverlabels mais bonitos
     fig.update_traces(
         hoverinfo='label+percent+value',
         hovertemplate='<b>%{label}</b><br>Quantidade: %{value}<br>Percentual: %{percent}<extra></extra>'
     )
-    
+
     return fig
 
-def criar_grafico_barras(dados, x, y, titulo):
+def criar_grafico_barras(dados, x, y, titulo, estados_selecionados=None):
+    # Filtrar por estados selecionados, se aplicável
+    if estados_selecionados:
+        dados = dados[dados['UF'].isin(estados_selecionados)]
+
     # Se os dados vierem como Series, converter para DataFrame
     if isinstance(dados, pd.Series):
         df = dados.reset_index()
@@ -107,7 +115,7 @@ def criar_grafico_barras(dados, x, y, titulo):
         if 'count' in df.columns:
             df = df.rename(columns={'count': 'QUANTIDADE'})
             y = 'QUANTIDADE'
-    
+
     fig = px.bar(
         df, 
         x=x, 
@@ -115,15 +123,15 @@ def criar_grafico_barras(dados, x, y, titulo):
         title=titulo,
         color_discrete_sequence=PALETA_CORES
     )
-    
+
     fig = aplicar_estilo_moderno(fig)
-    
+
     # Melhores hoverlabels
     fig.update_traces(
         hovertemplate='<b>%{x}</b><br>Quantidade: %{y}<extra></extra>',
         marker_line_width=0
     )
-    
+
     return fig
 
 def criar_grafico_linha(df, x, y, titulo):
@@ -259,4 +267,4 @@ def gerar_pdf(figs, titulos, metricas, ano_selecionado):
     pdf_output = BytesIO()
     pdf.output(pdf_output)
     pdf_data = base64.b64encode(pdf_output.getvalue()).decode('utf-8')
-    return pdf_data 
+    return pdf_data
